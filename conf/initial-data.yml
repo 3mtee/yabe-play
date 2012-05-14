@@ -1,9 +1,9 @@
 # Test data
 
-User(bob):
-    email:          bob@gmail.com
+User(emtee):
+    email:          vasilenko.sergey@gmail.com
     password:       secret
-    fullname:       Bob
+    fullname:       Emtee
     isAdmin:        true
 
 User(jeff):
@@ -25,10 +25,10 @@ Tag(mvc):
     name:           MVC
 
 
-Post(firstBobPost):
+Post(firstEmteePost):
     title:          About the model layer
     postedAt:       2009-06-14
-    author:         bob
+    author:         emtee
     tags:
                         - play
                         - architecture
@@ -44,10 +44,10 @@ Post(firstBobPost):
                     is controlled and used here, even though the technical details of storing it are
                     delegated to the infrastructure. This layer is the heart of business software.
 
-Post(secondBobPost):
+Post(secondEmteePost):
     title:          Just a test of YABE
     postedAt:       2009-03-25
-    author:         bob
+    author:         emtee
     tags:
                             - play
                             - architecture
@@ -71,18 +71,18 @@ Comment(c1):
     content:        >
                     You are right !
     postedAt:       2009-06-14
-    post:           firstBobPost
+    post:           firstEmteePost
 
 Comment(c2):
     author:         Mike
     content:        >
                     I knew that ...
     postedAt:       2009-06-15
-    post:           firstBobPost
+    post:           firstEmteePost
 
 Comment(c3):
     author:         Tom
     content:        >
                     This post is useless ?
     postedAt:       2009-04-05
-    post:           secondBobPost
+    post:           secondEmteePost
