@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b6b26617-dfb3-4860-be1f-74cf9e97db17" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/yabe.iws" afterPath="$PROJECT_DIR$/yabe.iws" />
     </list>
     <ignored path="yabe.iws" />
@@ -81,7 +82,7 @@
       <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="5" selection-start="37" selection-end="37" vertical-scroll-proportion="0.12666667">
+            <state line="7" column="5" selection-start="55" selection-end="55" vertical-scroll-proportion="0.22166666">
               <folding />
             </state>
           </provider>
@@ -105,6 +106,7 @@
         <option value="$PROJECT_DIR$/app/controllers/Application.java" />
         <option value="$PROJECT_DIR$/app/views/Application/index.html" />
         <option value="$PROJECT_DIR$/conf/application.conf" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -399,7 +401,11 @@
       <created>1336989044674</created>
       <updated>1336989044675</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="commit after import">
+      <created>1336989050619</created>
+      <updated>1336989050619</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -556,7 +562,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="5" selection-start="37" selection-end="37" vertical-scroll-proportion="0.12666667">
+        <state line="7" column="5" selection-start="55" selection-end="55" vertical-scroll-proportion="0.22166666">
           <folding />
         </state>
       </provider>

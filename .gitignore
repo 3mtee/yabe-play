@@ -3,3 +3,6 @@
 /lib
 /test-result
 /logs
+*.ipr
+*.iws
+*.iml
