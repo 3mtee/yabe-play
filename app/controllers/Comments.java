@@ -1,13 +1,9 @@
 package controllers;
 
-import play.mvc.With;
-
-/**
- * @author: emtee
- * @date: 5/14/12 4:40 PM
- */
+import play.*;
+import play.mvc.*;
 
 @Check("admin")
 @With(Secure.class)
-public class Comments extends CRUD {
+public class Comments extends CRUD {    
 }

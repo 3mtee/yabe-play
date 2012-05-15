@@ -1,78 +1,77 @@
-import models.Comment;
-import models.Post;
-import models.Tag;
-import models.User;
-import org.junit.Before;
-import org.junit.Test;
-import play.test.Fixtures;
-import play.test.UnitTest;
-
-import java.util.List;
-import java.util.Map;
-
+import org.junit.*;
+import java.util.*;
+import play.test.*;
+import models.*;
+ 
 public class BasicTest extends UnitTest {
-
-    public static final String NAME = "Emtee";
-    public static final String EMAIL = "emtee@gmail.com";
-
+    
     @Before
     public void setup() {
-        Fixtures.deleteDatabase();
+        Fixtures.deleteAll();
     }
-
+ 
     @Test
-    public void createAndRetrieveUserTest() {
-        new User(EMAIL, "test", NAME).save();
+    public void createAndRetrieveUser() {
+        // Create a new user and save it
+        new User("bob@gmail.com", "secret", "Bob").save();
 
-        final User user = User.find("byEmail", EMAIL).first();
+        // Retrieve the user with bob username
+        User bob = User.find("byEmail", "bob@gmail.com").first();
 
-        assertNotNull(user);
-        assertEquals(NAME, user.fullname);
-
-        assertNotNull(User.connect(EMAIL, "test"));
-        assertNull(User.connect(EMAIL, "atest"));
-        assertNull(User.connect("emt", "test"));
-
+        // Test 
+        assertNotNull(bob);
+        assertEquals("Bob", bob.fullname);
     }
+    
+    @Test
+    public void tryConnectAsUser() {
+        // Create a new user and save it
+        new User("bob@gmail.com", "secret", "Bob").save();
 
+        // Test 
+        assertNotNull(User.connect("bob@gmail.com", "secret"));
+        assertNull(User.connect("bob@gmail.com", "badpassword"));
+        assertNull(User.connect("tom@gmail.com", "secret"));
+    }
+    
     @Test
     public void createPost() {
         // Create a new user and save it
-        User user = new User(EMAIL, "secret", "emtee").save();
+        User bob = new User("bob@gmail.com", "secret", "Bob").save();
 
         // Create a new post
-        new Post(user, "My first post", "Hello world").save();
+        new Post(bob, "My first post", "Hello world").save();
 
         // Test that the post has been created
         assertEquals(1, Post.count());
 
-        // Retrieve all posts created by Bob
-        List<Post> posts = Post.find("byAuthor", user).fetch();
+        // Retrieve all post created by bob
+        List<Post> bobPosts = Post.find("byAuthor", bob).fetch();
 
         // Tests
-        assertEquals(1, posts.size());
-        Post firstPost = posts.get(0);
+        assertEquals(1, bobPosts.size());
+        Post firstPost = bobPosts.get(0);
         assertNotNull(firstPost);
-        assertEquals(user, firstPost.author);
+        assertEquals(bob, firstPost.author);
         assertEquals("My first post", firstPost.title);
         assertEquals("Hello world", firstPost.content);
         assertNotNull(firstPost.postedAt);
     }
-
+    
     @Test
     public void postComments() {
         // Create a new user and save it
-        User user = new User(EMAIL, "secret", NAME).save();
+        User bob = new User("bob@gmail.com", "secret", "Bob").save();
 
         // Create a new post
-        Post post = new Post(user, "My first post", "Hello world").save();
+        Post bobPost = new Post(bob, "My first post", "Hello world").save();
 
         // Post a first comment
-        new Comment(post, "Jeff", "Nice post").save();
-        new Comment(post, "Tom", "I knew that !").save();
+        new Comment(bobPost, "Jeff", "Nice post").save();
+        new Comment(bobPost, "Tom", "I knew that !").save();
 
         // Retrieve all comments
-        List<Comment> bobPostComments = Comment.find("byPost", post).fetch();
+        List<Comment> bobPostComments = Comment.find("byPost", bobPost).fetch();
 
         // Tests
         assertEquals(2, bobPostComments.size());
@@ -89,7 +88,7 @@ public class BasicTest extends UnitTest {
         assertEquals("I knew that !", secondComment.content);
         assertNotNull(secondComment.postedAt);
     }
-
+    
     @Test
     public void useTheCommentsRelation() {
         // Create a new user and save it
@@ -107,7 +106,7 @@ public class BasicTest extends UnitTest {
         assertEquals(1, Post.count());
         assertEquals(2, Comment.count());
 
-        // Retrieve Bob's post
+        // Retrieve the bob post
         bobPost = Post.find("byAuthor", bob).first();
         assertNotNull(bobPost);
 
@@ -118,15 +117,15 @@ public class BasicTest extends UnitTest {
         // Delete the post
         bobPost.delete();
 
-        // Check that all comments have been deleted
+        // Chech the all comments have been deleted
         assertEquals(1, User.count());
         assertEquals(0, Post.count());
         assertEquals(0, Comment.count());
     }
-
+    
     @Test
     public void fullTest() {
-        Fixtures.loadModels("data.yml");
+        Fixtures.load("data.yml");
 
         // Count things
         assertEquals(2, User.count());
@@ -139,11 +138,11 @@ public class BasicTest extends UnitTest {
         assertNull(User.connect("jeff@gmail.com", "badpassword"));
         assertNull(User.connect("tom@gmail.com", "secret"));
 
-        // Find all of Bob's posts
+        // Find all bob posts
         List<Post> bobPosts = Post.find("author.email", "bob@gmail.com").fetch();
         assertEquals(2, bobPosts.size());
 
-        // Find all comments related to Bob's posts
+        // Find all comments related to bob posts
         List<Comment> bobComments = Comment.find("post.author.email", "bob@gmail.com").fetch();
         assertEquals(3, bobComments.size());
 
@@ -160,7 +159,7 @@ public class BasicTest extends UnitTest {
         assertEquals(3, frontPost.comments.size());
         assertEquals(4, Comment.count());
     }
-
+    
     @Test
     public void testTags() {
         // Create a new user and save it
@@ -168,29 +167,33 @@ public class BasicTest extends UnitTest {
 
         // Create a new post
         Post bobPost = new Post(bob, "My first post", "Hello world").save();
-        Post anotherBobPost = new Post(bob, "Hop", "Hello world").save();
-
+        Post anotherBobPost = new Post(bob, "My second post post", "Hello world").save();
+        
         // Well
         assertEquals(0, Post.findTaggedWith("Red").size());
-
+        
         // Tag it now
         bobPost.tagItWith("Red").tagItWith("Blue").save();
         anotherBobPost.tagItWith("Red").tagItWith("Green").save();
-
+        
         // Check
-        assertEquals(2, Post.findTaggedWith("Red").size());
+        assertEquals(2, Post.findTaggedWith("Red").size());        
         assertEquals(1, Post.findTaggedWith("Blue").size());
         assertEquals(1, Post.findTaggedWith("Green").size());
-
-        assertEquals(1, Post.findTaggedWith("Red", "Blue").size());
-        assertEquals(1, Post.findTaggedWith("Red", "Green").size());
-        assertEquals(0, Post.findTaggedWith("Red", "Green", "Blue").size());
-        assertEquals(0, Post.findTaggedWith("Green", "Blue").size());
-        final List<Map> cloud = Tag.getCloud();
-        assertEquals(
-                "[{tag=Blue, pound=1}, {tag=Green, pound=1}, {tag=Red, pound=2}]",
-                cloud.toString()
-        );
+        
+        assertEquals(1, Post.findTaggedWith("Red", "Blue").size());   
+        assertEquals(1, Post.findTaggedWith("Red", "Green").size());   
+        assertEquals(0, Post.findTaggedWith("Red", "Green", "Blue").size());  
+        assertEquals(0, Post.findTaggedWith("Green", "Blue").size());    
+        
+        List<Map> cloud = Tag.getCloud();
+        Collections.sort(cloud, new Comparator<Map>() {
+            public int compare(Map m1, Map m2) {
+                return m1.get("tag").toString().compareTo(m2.get("tag").toString());
+            }
+        });
+        assertEquals("[{tag=Blue, pound=1}, {tag=Green, pound=1}, {tag=Red, pound=2}]", cloud.toString());
+        
     }
-
+ 
 }
